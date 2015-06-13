@@ -1,0 +1,45 @@
+#!/bin/bash
+# ( http://www.aitishnik.ru/linux/ftp-server-debian.html )
+# Install vsftpd
+apt-get update
+apt-get install vsftpd -y
+# Add user ftp , change home directory to  /var/ftp
+useradd -d /var/ftp ftp
+# delete folder ftp
+rmdir /home/ftp
+# Add group ftpuser
+addgroup ftpuser
+# Add user ftpuser and add him to ftpuser
+useradd -d /var/ftp -g ftpuser ftpuser
+# Change password user ftpuser на 123456
+echo -e "123456\n123456\n" | passwd ftpuser
+# Create folder ftp in /var/ftp and add permission
+mkdir /var/ftp
+chmod 555 /var/ftp
+chown root:ftpuser /var/ftp
+# Create public folger pub and atech group to folder
+mkdir /var/ftp/pub
+chown ftpuser:ftpuser /var/ftp/pub
+# Create reserve copy to file  vsftpd.conf
+cp /etc/vsftpd.conf /etc/vsftpd.conf_old
+# Clear vsftpd.conf
+cat /dev/null > /etc/vsftpd.conf
+# Add new data config
+echo listen=YES >> /etc/vsftpd.conf
+# anonymous_enable
+echo anonymous_enable=YES >> /etc/vsftpd.conf
+# Dir for anonymous
+echo anon_root=/var/ftp/pub >> /etc/vsftpd.conf
+echo anon_umask=022 >> /etc/vsftpd.conf
+# Add permission to local users to write home directory
+echo local_enable=YES >> /etc/vsftpd.conf
+echo write_enable=YES >> /etc/vsftpd.conf
+echo local_umask=022 >> /etc/vsftpd.conf
+# Local users will enter only home directory
+echo chroot_local_user=YES >> /etc/vsftpd.conf
+echo chroot_list_enable=NO >> /etc/vsftpd.conf
+# Messages will by written in to logs file
+echo xferlog_enable=YES >> /etc/vsftpd.conf
+echo xferlog_file=/var/log/vsftpd.log >>/etc/vsftpd.conf
+# restart vsftpd
+/etc/init.d/vsftpd restart
