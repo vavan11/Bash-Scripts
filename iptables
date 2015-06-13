@@ -1,0 +1,31 @@
+#!/bin/bash
+# install iptables-persistent
+apt-get install iptables-persistent -y
+# Clear existing rules table:
+iptables -F
+# Allow incoming SSH interface eth0
+iptables -A INPUT -p tcp -i eth0 --dport 22 -j ACCEPT
+# Prescribes default policies:
+iptables -P INPUT DROP
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+# Boating traffic is allowed to localhost:
+iptables -A INPUT -i lo -j ACCEPT
+# Making protection against Dos attacks:
+iptables -A INPUT -p tcp -m tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s -j ACCEPT
+# Allows the packets of the protocols tcp \ udp creating new connections:
+iptables -A INPUT -p tcp -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p udp -m state --state RELATED,ESTABLISHED -j ACCEPT 
+# Allows traffic to essential services:
+iptables -A INPUT -i eth0 -p tcp --dport 21 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -i eth0 -p tcp --dport 25 -j ACCEPT
+iptables -A INPUT -i eth0 -p udp --sport 53 -j ACCEPT
+iptables -A INPUT -i eth0 -p icmp -m icmp --icmp-type 3 -j ACCEPT
+iptables -A INPUT -i eth0 -p icmp -m icmp --icmp-type 11 -j ACCEPT
+iptables -A INPUT -i eth0 -p icmp -m icmp --icmp-type 12 -j ACCEPT
+# Protects our ssh port of brute force
+iptables -A INPUT -p tcp --syn --dport 22 -m recent --name radiator --set
+iptables -A INPUT -p tcp --syn --dport 22 -m recent --name radiator --update --seconds 30 --hitcount 3 -j DROP
+iptables-save > /etc/iptables/rules.v4
