@@ -1,0 +1,17 @@
+apt-get update
+apt-get install isc-dhcp-server
+cat /dev/null > /etc/default/isc-dhcp-server
+echo INTERFACES="eth1" >> /etc/default/isc-dhcp-server
+cat /dev/null > /etc/dhcp/dhcpd.conf
+echo #global option >> /etc/dhcp/dhcpd.conf
+echo "option domain-name "home.net";" >> /etc/dhcp/dhcpd.conf
+echo "option domain-name-servers 10.10.20.1;" >> /etc/dhcp/dhcpd.conf
+echo "option subnet-mask 255.255.255.240;" >> /etc/dhcp/dhcpd.conf
+echo "default-lease-time 600;" >> /etc/dhcp/dhcpd.conf
+echo "max-lease-time 7200;" >> /etc/dhcp/dhcpd.conf
+echo "subnet 192.168.0.0 netmask 255.255.255.240 {" >> /etc/dhcp/dhcpd.conf
+echo "range 192.168.0.2 192.168.0.14;" >> /etc/dhcp/dhcpd.conf
+echo "option broadcast-address 192.168.0.15;" >> /etc/dhcp/dhcpd.conf
+echo "option routers 192.168.0.1;" >> /etc/dhcp/dhcpd.conf
+echo "}" >> /etc/dhcp/dhcpd.conf
+service isc-dhcp-server restart
