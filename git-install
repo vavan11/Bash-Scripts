@@ -1,7 +1,0 @@
-#!/bin/bash
-apt-get update
-apt-get install git -y
-# Tidy code highlighting output GIt
-git config --global color.diff "auto"
-git config --global color.status "auto"
-git config --global color.branch "auto"
