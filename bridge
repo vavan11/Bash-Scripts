@@ -1,0 +1,4 @@
+#!/bin/bash
+ apt-get install bridge-utils -y
+# add bridge br0
+brctl addbr br0	
