@@ -1,7 +1,0 @@
-#!/bin/bash
-# configure eth1
-echo "iface eth1 inet static" >> /etc/network/interfaces
-echo "address 10.10.0.1" >> /etc/network/interfaces
-echo "netmask 255.255.255.240" >> /etc/network/interfaces
-echo "auto eth1" >> /etc/network/interfaces
-reboot
