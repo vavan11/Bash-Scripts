@@ -1,6 +1,6 @@
 #!/bin/bash
 apt-get update
-apt-get install isc-dhcp-server
+apt-get install isc-dhcp-server -y
 cat /dev/null > /etc/default/isc-dhcp-server
 echo INTERFACES="eth1" >> /etc/default/isc-dhcp-server
 cat /dev/null > /etc/dhcp/dhcpd.conf
