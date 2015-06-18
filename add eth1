@@ -1,9 +1,9 @@
 #!/bin/bash
 # configure eth1
-echo iface eth1 inet static >> /etc/network/interfaces
-echo address 192.168.0.1 >> /etc/network/interfaces
-echo netmask 255.255.255.240 >> /etc/network/interfaces
-echo gateway 192.168.0.1 >> /etc/network/interfaces
-echo auto eth1 >> /etc/network/interfaces
+echo "iface eth1 inet static" >> /etc/network/interfaces
+echo "address 192.168.0.1" >> /etc/network/interfaces
+echo "netmask 255.255.255.240" >> /etc/network/interfaces
+echo "gateway 192.168.0.1" >> /etc/network/interfaces
+echo "auto eth1" >> /etc/network/interfaces
 service networking restart
 ifconfig eth1 up
