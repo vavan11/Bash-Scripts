@@ -1,1 +1,5 @@
-bin/bash
+#!/bin/bash
+#Create a user and login.
+adduser csgoserver
+passwd csgoserver
+su - csgoserver
