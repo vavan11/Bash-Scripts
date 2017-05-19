@@ -11,7 +11,7 @@ rmdir /home/ftp
 addgroup ftpuser
 # Add user ftpuser and add him to ftpuser
 useradd -d /var/ftp -g ftpuser ftpuser
-# Change password user ftpuser на 123456
+# Change password user ftpuser to 123456
 echo -e "123456\n123456\n" | passwd ftpuser
 # Create folder ftp in /var/ftp and add permission
 mkdir /var/ftp
