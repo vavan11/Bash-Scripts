@@ -1,0 +1,51 @@
+#!/bin/bash
+sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install lvm2 util-linux -y
+lsblk
+
+echo "Enter The firs block devices"
+read VALUE1
+#LINE1= "/dev/sd."
+#echo "$LINE1"
+#echo "$VALUE1"
+VALUE="/dev/"
+Gb=G
+ls /dev/ > /tmp/f1
+VALUE2=$(cat /tmp/f1 | grep -w $VALUE1)
+echo "$VALUE2"
+if [ $VALUE2 = $VALUE1 ]
+then
+  echo "Enter the second block device"
+else
+  echo "You did not enter block devices"
+  exit 0
+fi
+read VALUE3
+VALUE4=$(cat /tmp/f1 | grep -w $VALUE3)
+echo "$VALUE4"
+if [ $VALUE3 = $VALUE4 ]
+then
+  echo "Enter the second block device"
+else
+  echo "You did not enter block devices"
+  exit 0
+fi
+VALUE5="$VALUE$VALUE1"
+VALUE6="$VALUE$VALUE3"
+echo "$VALUE5" "$VALUE6"
+sudo pvcreate "$VALUE5 $VALUE6"
+echo "Enter gr. name"
+read VALUE7
+sudo vgcreate "$VALUE7 $VALUE1 $VALUE2"
+echo "Print name and size of file system and SWAP, separate by space"
+read VALUE8 VALUE9 VALUE10
+echo "The name is $VALUE8, size is $VALUE9 GB, SWAP $VALUE10 "
+sudo lvcreate -n $VALUE8 -L$VALUE9$G ws
+sudo lvcreate -n swap -L$VALUE10$G ws
+sudo mkswap -L swap /dev/ws/swap
+sudo swapon /dev/ws/swap
+echo "Create folger for mount poin for examle /mnt/target"
+read MNT
+sudo mkdir $MNT
+echo "Mount $MNT"
+sudo mount /dev/$VALUE7/$VALUE8 $MNT
+exit 0
