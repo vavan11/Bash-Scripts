@@ -1,7 +1,6 @@
 #!/bin/bash
 sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install lvm2 util-linux -y
 lsblk
-
 echo "Enter The firs block devices"
 read VALUE1
 #LINE1= "/dev/sd."
