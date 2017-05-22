@@ -1,9 +1,0 @@
-#!/bin/bash
-#Create a user and login.
-adduser csgoserver
-passwd csgoserver
-su - csgoserver
-#Download the script.
-wget http://gameservermanagers.com/dl/csgoserver
-chmod +x csgoserver
-./csgoserver install
