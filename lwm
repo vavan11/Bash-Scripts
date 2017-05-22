@@ -1,14 +1,13 @@
 #!/bin/bash
 apt-get update && sudo apt-get upgrade -y && sudo apt-get install lvm2 util-linux -y # update and install app
 lsblk # list all block devices
-ls /dev/ > /tmp/devlist # Save dev to list
 
 VALUE="/dev/"
 SW=swap
 
 echo "Enter the first block device"
 read VALUE1
-VALUE2=$(cat /tmp/devlist | grep -w $VALUE1)
+VALUE2=$(ls /dev | grep -w $VALUE1)
 if [ $VALUE2 = $VALUE1 ]
 then
   echo "Enter the second block device"
@@ -17,7 +16,7 @@ else
   exit 0
 fi
 read VALUE3
-VALUE4=$(cat /tmp/f1 | grep -w $VALUE3)
+VALUE4=$(ls /dev | grep -w $VALUE3)
 if [ $VALUE3 = $VALUE4 ]
 then
   echo "Enter the second block device"
@@ -48,7 +47,5 @@ read MNT
 mkdir $MNT
 echo "Mount $MNT"
 mount $VALUE$VALUE7/$VALUE8 $MNT
-
-rm /tmp/devlist # Delite temp file
 
 exit 0
