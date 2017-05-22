@@ -36,7 +36,7 @@ vgcreate $VALUE7 $VALUE5 $VALUE6 # Creating LVM group
 
 echo "Print name and size be Mb. of file system and SWAP, separate by space"
 read VALUE8 VALUE9 VALUE10
-echo "The name is $VALUE8, size is $VALUE9 GB, SWAP $VALUE10 "
+echo "The name is $VALUE8, size is $VALUE9 GB, SWAP $VALUE10"
 lvcreate -n $VALUE8 -L$VALUE9 $VALUE7 # Creating logical volume
 mkfs.ext4 -L $VALUE8 $VALUE$VALUE7/$VALUE8 # Creating file system
 lvcreate -n $SW -L$VALUE10 $VALUE7 #Creating SWAP
