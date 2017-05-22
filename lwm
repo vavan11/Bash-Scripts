@@ -1,50 +1,54 @@
 #!/bin/bash
-sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install lvm2 util-linux -y
-lsblk
-echo "Enter The firs block devices"
-read VALUE1
-#LINE1= "/dev/sd."
-#echo "$LINE1"
-#echo "$VALUE1"
+apt-get update && sudo apt-get upgrade -y && sudo apt-get install lvm2 util-linux -y # update and install app
+lsblk # list all block devices
+ls /dev/ > /tmp/devlist # Save dev to list
+
 VALUE="/dev/"
-Gb=G
-ls /dev/ > /tmp/f1
-VALUE2=$(cat /tmp/f1 | grep -w $VALUE1)
-echo "$VALUE2"
+SW=swap
+
+echo "Enter the first block device"
+read VALUE1
+VALUE2=$(cat /tmp/devlist | grep -w $VALUE1)
 if [ $VALUE2 = $VALUE1 ]
 then
   echo "Enter the second block device"
 else
-  echo "You did not enter block devices"
+  echo "You did not enter block device"
   exit 0
 fi
 read VALUE3
 VALUE4=$(cat /tmp/f1 | grep -w $VALUE3)
-echo "$VALUE4"
 if [ $VALUE3 = $VALUE4 ]
 then
   echo "Enter the second block device"
 else
-  echo "You did not enter block devices"
+  echo "You did not enter block device"
   exit 0
 fi
+
 VALUE5="$VALUE$VALUE1"
 VALUE6="$VALUE$VALUE3"
-echo "$VALUE5" "$VALUE6"
-sudo pvcreate "$VALUE5 $VALUE6"
+pvcreate $VALUE5 $VALUE6 # Creating Physical Volumes
+
 echo "Enter gr. name"
 read VALUE7
-sudo vgcreate "$VALUE7 $VALUE1 $VALUE2"
+vgcreate $VALUE7 $VALUE5 $VALUE6 # Creating LVM group
+
 echo "Print name and size of file system and SWAP, separate by space"
 read VALUE8 VALUE9 VALUE10
 echo "The name is $VALUE8, size is $VALUE9 GB, SWAP $VALUE10 "
-sudo lvcreate -n $VALUE8 -L$VALUE9$G ws
-sudo lvcreate -n swap -L$VALUE10$G ws
-sudo mkswap -L swap /dev/ws/swap
-sudo swapon /dev/ws/swap
-echo "Create folger for mount poin for examle /mnt/target"
+lvcreate -n $VALUE8 -L$VALUE9G $VALUE7 # Creating logical volume
+mkfs.ext4 -L $VALUE8 $VALUE$VALUE7/$VALUE8 # Creating file system
+lvcreate -n $SW -L$VALUE10G $VALUE7 #Creating SWAP
+mkswap -L $SW $VALUE$VALUE7/$SW
+swapon $VALUE$VALUE7/$SW
+
+echo "Create folder for mount point for example /mnt/target"
 read MNT
-sudo mkdir $MNT
+mkdir $MNT
 echo "Mount $MNT"
-sudo mount /dev/$VALUE7/$VALUE8 $MNT
+mount $VALUE$VALUE7/$VALUE8 $MNT
+
+rm /tmp/devlist # Delite temp file
+
 exit 0
